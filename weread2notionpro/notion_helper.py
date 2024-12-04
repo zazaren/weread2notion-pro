@@ -123,10 +123,10 @@ class NotionHelper:
                 self.database_id_dict[child.get("child_database").get("title")] = (
                     child.get("id")
                 )
-            elif child["type"] == "image":
+            elif child["type"] == "link_preview":
                 print(f"结构具体参考：{child}")
-                if child.get("image").get("external").get("url"):
-                    if child.get("image").get("external").get("url").startswith("https://raw.githubusercontent.com/"):
+                if child.get("link_preview").get("url"):
+                    if child.get("link_preview").get("url").startswith("https://raw.githubusercontent.com/"):
                         self.heatmap_block_id = child.get("id")
             # 如果子块有子块，递归调用函数
             if "has_children" in child and child["has_children"]:
