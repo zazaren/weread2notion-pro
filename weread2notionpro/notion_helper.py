@@ -91,7 +91,7 @@ class NotionHelper:
         )
         self.read_database_id = self.database_id_dict.get(
             self.database_name_dict.get("READ_DATABASE_NAME")
-        )  
+        )
         self.setting_database_id = self.database_id_dict.get(
             self.database_name_dict.get("SETTING_DATABASE_NAME")
         )
@@ -115,23 +115,20 @@ class NotionHelper:
             raise Exception(f"获取NotionID失败，请检查输入的Url是否正确")
 
     def search_database(self, block_id):
-        self.heatmap_block_id = "4#150d6e07dcfd817fb610c5c73e13118b"
-        # children = self.client.blocks.children.list(block_id=block_id)["results"]
-        # # 遍历子块
-        # for child in children:
-        #     # 检查子块的类型
-        #     if child["type"] == "child_database":
-        #         self.database_id_dict[child.get("child_database").get("title")] = (
-        #             child.get("id")
-        #         )
-        #     elif child["type"] == "link_preview":
-        #         print(f"结构具体参考：{child}")
-        #         if child.get("link_preview").get("url"):
-        #             if child.get("link_preview").get("url").startswith("https://raw.githubusercontent.com/"):
-        #                 self.heatmap_block_id = child.get("id")
-        #     # 如果子块有子块，递归调用函数
-        #     if "has_children" in child and child["has_children"]:
-        #         self.search_database(child["id"])
+        children = self.client.blocks.children.list(block_id=block_id)["results"]
+        # 遍历子块
+        for child in children:
+            # 检查子块的类型
+            if child["type"] == "child_database":
+                self.database_id_dict[child.get("child_database").get("title")] = (
+                    child.get("id")
+                )
+            elif child["type"] == "embed" and child.get("embed").get("url"):
+                if child.get("embed").get("url").startswith("https://raw.githubusercontent.com/"):
+                    self.heatmap_block_id = child.get("id")
+            # 如果子块有子块，递归调用函数
+            if "has_children" in child and child["has_children"]:
+                self.search_database(child["id"])
 
     def update_book_database(self):
         """更新数据库"""
@@ -195,8 +192,8 @@ class NotionHelper:
             title=title,
             icon=get_icon("https://www.notion.so/icons/target_gray.svg"),
             properties=properties,
-        ).get("id")    
-        
+        ).get("id")
+
     def create_setting_database(self):
         title = [
             {
@@ -266,8 +263,8 @@ class NotionHelper:
                 parent={"database_id": self.setting_database_id},
                 properties=properties,
             )
-  
-        
+
+
 
     def update_heatmap(self, block_id, url):
         # 更新 image block 的链接

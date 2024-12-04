@@ -85,10 +85,10 @@ def main():
     image_file = get_file()
     if image_file:
         image_url = f"https://raw.githubusercontent.com/{os.getenv('REPOSITORY')}/{os.getenv('REF').split('/')[-1]}/OUT_FOLDER/{image_file}"
-        # heatmap_url = f"https://heatmap.malinkang.com/?image={image_url}"
+        heatmap_url = f"https://heatmap.malinkang.com/?image={image_url}"
         if notion_helper.heatmap_block_id:
             response = notion_helper.update_heatmap(
-                block_id=notion_helper.heatmap_block_id, url=image_url
+                block_id=notion_helper.heatmap_block_id, url=heatmap_url
             )
         else:
             print(f"更新热力图失败，没有添加热力图占位。具体参考：{HEATMAP_GUIDE}")
